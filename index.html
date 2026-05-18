@@ -963,11 +963,27 @@ function goBack() {
 // ── Lead capture ──
 function submitLead() {
   const email = document.getElementById('inp-email').value.trim();
+  const name  = document.getElementById('inp-name').value.trim();
   if (!email || !email.includes('@')) {
     document.getElementById('inp-email').classList.add('error');
     return;
   }
   document.getElementById('inp-email').classList.remove('error');
+
+  // Send to Zapier webhook
+  fetch('https://hooks.zapier.com/hooks/catch/27588813/4o6hxq0/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name:  name || '',
+      email: email,
+      source: 'home-detox-quiz',
+      submitted_at: new Date().toISOString()
+    })
+  }).catch(function(err) {
+    console.log('Webhook error:', err);
+  });
+
   showResults();
 }
 
