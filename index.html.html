@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Detox Score | The Wellness Brew</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #031e40;
+    --navy-mid: #052a58;
+    --navy-light: #0a3d7a;
+    --cream: #f5f0e8;
+    --cream-dark: #ede6d6;
+    --gold: #c8a96e;
+    --gold-light: #e8c98a;
+    --rust: #c4503a;
+    --sage: #7a9e7e;
+    --text-muted: rgba(245,240,232,0.55);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(10,61,122,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(200,169,110,0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(200,169,110,0.15);
+  }
+  .logo { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.12em; }
+  .logo-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+
+  /* ── WRAPPER ── */
+  .quiz-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 56px 24px 100px;
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp 0.45s ease both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INTRO ── */
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .intro-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(50px, 10vw, 84px);
+    line-height: 0.93;
+    letter-spacing: 0.02em;
+    margin-bottom: 26px;
+  }
+  .intro-title span { color: var(--gold); }
+  .intro-body {
+    font-size: 16px;
+    line-height: 1.68;
+    color: rgba(245,240,232,0.72);
+    max-width: 500px;
+    margin-bottom: 36px;
+  }
+  .stats-row {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    padding: 22px 0;
+    border-top: 1px solid rgba(200,169,110,0.18);
+    border-bottom: 1px solid rgba(200,169,110,0.18);
+    margin-bottom: 40px;
+  }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--gold); letter-spacing: 0.04em; }
+  .stat-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* section pills */
+  .section-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .pill {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid rgba(200,169,110,0.22);
+    color: rgba(245,240,232,0.6);
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 15px 32px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(200,169,110,0.22); }
+  .btn-primary:disabled { opacity: 0.38; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-primary svg { transition: transform 0.2s; }
+  .btn-primary:not(:disabled):hover svg { transform: translateX(4px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(200,169,110,0.28);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 11px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── SECTION TRANSITION CARD ── */
+  .section-card {
+    border: 1px solid rgba(200,169,110,0.22);
+    padding: 36px 40px;
+    background: rgba(200,169,110,0.04);
+    margin-bottom: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .section-card-icon { font-size: 32px; margin-bottom: 14px; display: block; }
+  .section-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .section-card-body {
+    font-size: 14px;
+    color: rgba(245,240,232,0.65);
+    line-height: 1.6;
+    max-width: 460px;
+    margin-bottom: 28px;
+  }
+  .section-card-stat {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    padding: 8px 14px;
+    border: 1px solid rgba(200,169,110,0.2);
+    display: inline-block;
+    margin-bottom: 28px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap { margin-bottom: 44px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+  .progress-frac { font-family: 'Bebas Neue', sans-serif; font-size: 17px; color: var(--gold); letter-spacing: 0.05em; }
+  .progress-track { height: 2px; background: rgba(245,240,232,0.08); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 0.4s ease; }
+
+  /* section marker */
+  .section-marker {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-marker::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(200,169,110,0.18);
+  }
+
+  /* ── QUESTION ── */
+  .q-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(20px, 3.8vw, 29px);
+    line-height: 1.22;
+    margin-bottom: 10px;
+    color: var(--cream);
+  }
+  .q-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    line-height: 1.55;
+    max-width: 520px;
+  }
+  .q-sub em { color: rgba(200,169,110,0.8); font-style: normal; }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+  .option {
+    border: 1px solid rgba(245,240,232,0.1);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.02);
+  }
+  .option:hover { border-color: rgba(200,169,110,0.45); background: rgba(200,169,110,0.05); }
+  .option.selected { border-color: var(--gold); background: rgba(200,169,110,0.09); }
+
+  .opt-radio {
+    width: 18px; height: 18px;
+    border: 1px solid rgba(245,240,232,0.22);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s;
+  }
+  .option.selected .opt-radio { border-color: var(--gold); background: var(--gold); }
+  .option.selected .opt-radio::after { content: ''; width: 7px; height: 7px; background: var(--navy); border-radius: 50%; }
+
+  .opt-content { flex: 1; }
+  .opt-text { font-size: 14px; line-height: 1.45; color: var(--cream); }
+  .option.selected .opt-text { color: var(--gold-light); }
+  .opt-note { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+
+  .opt-badge {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-high { background: rgba(196,80,58,0.14); color: #e07868; }
+  .badge-med  { background: rgba(200,169,110,0.14); color: var(--gold); }
+  .badge-low  { background: rgba(122,158,126,0.14); color: var(--sage); }
+
+  /* ── NAV ── */
+  .q-nav { display: flex; justify-content: space-between; align-items: center; }
+
+  /* ── LEAD CAPTURE ── */
+  .lead-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 7vw, 60px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+  }
+  .lead-body { font-size: 15px; color: rgba(245,240,232,0.68); line-height: 1.65; max-width: 460px; margin-bottom: 32px; }
+  .lead-includes { display: flex; flex-direction: column; gap: 9px; margin-bottom: 32px; }
+  .lead-include-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(245,240,232,0.75); }
+  .include-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+  .form-field { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .form-input {
+    width: 100%;
+    background: rgba(5,42,88,0.6);
+    border: 1px solid rgba(200,169,110,0.2);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 12px 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    max-width: 440px;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--text-muted); }
+  .form-input.error { border-color: var(--rust); }
+  .form-privacy { font-size: 12px; color: var(--text-muted); margin-top: 14px; line-height: 1.5; }
+  .skip-btn { background: none; border: none; color: var(--text-muted); font-size: 12px; cursor: pointer; font-family: 'DM Sans', sans-serif; text-decoration: underline; margin-top: 12px; display: block; }
+  .skip-btn:hover { color: var(--cream); }
+
+  /* ── RESULTS ── */
+  .results-top { text-align: center; margin-bottom: 52px; }
+
+  .score-ring-wrap { display: flex; justify-content: center; margin-bottom: 28px; }
+  .score-ring { position: relative; width: 152px; height: 152px; }
+  .score-ring svg { width: 152px; height: 152px; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: rgba(245,240,232,0.07); stroke-width: 6; }
+  .ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1); }
+  .score-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-num { font-family: 'Bebas Neue', sans-serif; font-size: 52px; line-height: 1; letter-spacing: 0.02em; }
+  .score-denom { font-size: 11px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+  .results-grade { font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 12px; }
+  .results-title { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 4.5vw, 38px); line-height: 1.15; margin-bottom: 14px; }
+  .results-title em { font-style: italic; color: var(--gold); }
+  .results-summary { font-size: 15px; line-height: 1.68; color: rgba(245,240,232,0.68); max-width: 500px; margin: 0 auto; }
+
+  /* tier colors */
+  .tier-excellent .ring-fill { stroke: var(--sage); }
+  .tier-excellent .score-num { color: var(--sage); }
+  .tier-excellent .results-grade { color: var(--sage); }
+
+  .tier-good .ring-fill { stroke: var(--gold); }
+  .tier-good .score-num { color: var(--gold); }
+  .tier-good .results-grade { color: var(--gold); }
+
+  .tier-moderate .ring-fill { stroke: #e09050; }
+  .tier-moderate .score-num { color: #e09050; }
+  .tier-moderate .results-grade { color: #e09050; }
+
+  .tier-poor .ring-fill { stroke: var(--rust); }
+  .tier-poor .score-num { color: var(--rust); }
+  .tier-poor .results-grade { color: var(--rust); }
+
+  /* ── BREAKDOWN ── */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .breakdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 44px; }
+  @media(max-width:500px){ .breakdown-grid { grid-template-columns: 1fr; } }
+  .breakdown-item { border: 1px solid rgba(245,240,232,0.09); padding: 16px 18px; background: rgba(255,255,255,0.02); }
+  .bd-cat { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+  .bd-track { height: 2px; background: rgba(245,240,232,0.08); margin-bottom: 7px; }
+  .bd-fill { height: 100%; transition: width 0.9s ease 0.2s; }
+  .bd-status { font-size: 12px; font-weight: 600; }
+
+  /* ── FINDINGS ── */
+  .findings { margin-bottom: 44px; }
+  .finding {
+    display: flex;
+    gap: 14px;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+    align-items: flex-start;
+  }
+  .finding-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .fi-warn    { background: rgba(196,80,58,0.14); }
+  .fi-caution { background: rgba(200,169,110,0.14); }
+  .fi-ok      { background: rgba(122,158,126,0.14); }
+  .finding-body strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .finding-body p { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .finding-body .source { font-size: 11px; color: rgba(200,169,110,0.6); margin-top: 4px; font-style: italic; }
+
+  /* ── CTA BLOCK ── */
+  .cta-block {
+    border: 1px solid rgba(200,169,110,0.28);
+    padding: 40px;
+    background: rgba(200,169,110,0.04);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .cta-eyebrow { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(26px, 5vw, 42px); letter-spacing: 0.04em; line-height: 1.05; margin-bottom: 14px; }
+  .cta-body { font-size: 14px; color: rgba(245,240,232,0.68); line-height: 1.65; max-width: 400px; margin: 0 auto 24px; }
+  .cta-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px; }
+  .cta-chip { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border: 1px solid rgba(200,169,110,0.22); color: var(--gold); }
+  .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .cta-btns a { text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:600px){
+    header { padding: 18px 20px; }
+    .quiz-wrap { padding: 36px 18px 72px; }
+    .stats-row { gap: 18px; }
+    .section-card { padding: 28px 22px; }
+    .cta-block { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">THE WELLNESS BREW</div>
+  <div class="logo-dot"></div>
+</header>
+
+<div class="quiz-wrap">
+
+  <!-- ════════════════ INTRO ════════════════ -->
+  <div class="screen active" id="s-intro">
+    <div class="eyebrow">Free Assessment · 4 Minutes</div>
+    <h1 class="intro-title">What's Your<br><span>Home Detox</span><br>Score?</h1>
+    <p class="intro-body">
+      Most people optimize their diet, sleep, and exercise — but never audit the environment they spend 90% of their time in. Your water, cookware, cleaning products, and indoor air may be working against everything else you're doing.
+    </p>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">2–5×</div><div class="stat-lbl">More pollutants indoors vs. outdoors (EPA)</div></div>
+      <div class="stat"><div class="stat-num">165M</div><div class="stat-lbl">Americans at risk of PFAS in tap water (EWG)</div></div>
+      <div class="stat"><div class="stat-num">9,100</div><div class="stat-lbl">Microplastic particles from a single cracked pan</div></div>
+    </div>
+    <p class="eyebrow" style="margin-bottom:12px;">Five categories covered</p>
+    <div class="section-pills">
+      <span class="pill">💧 Water</span>
+      <span class="pill">🍳 Kitchen</span>
+      <span class="pill">🧴 Personal Care</span>
+      <span class="pill">👕 Laundry & Cleaning</span>
+      <span class="pill">🌬️ Indoor Air</span>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">
+      Start the Assessment
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <!-- ════════════════ SECTION TRANSITIONS ════════════════ -->
+  <div class="screen" id="s-section">
+    <div class="section-card">
+      <span class="section-card-icon" id="sc-icon"></span>
+      <div class="section-card-title" id="sc-title"></div>
+      <p class="section-card-body" id="sc-body"></p>
+      <div class="section-card-stat" id="sc-stat"></div>
+      <br>
+      <button class="btn-primary" onclick="startSection()">
+        Continue
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════ QUESTION ════════════════ -->
+  <div class="screen" id="s-question">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-label" id="prog-label">Section 1 of 5</span>
+        <span class="progress-frac" id="prog-frac">Q 1 / 18</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:4%"></div></div>
+    </div>
+
+    <div class="section-marker" id="q-section-marker"></div>
+    <h2 class="q-text" id="q-text"></h2>
+    <p class="q-sub" id="q-sub"></p>
+    <div class="options" id="options"></div>
+
+    <div class="q-nav">
+      <button class="btn-ghost" id="btn-back" onclick="goBack()">← Back</button>
+      <button class="btn-primary" id="btn-next" onclick="goNext()" disabled>
+        Continue
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════ LEAD CAPTURE ════════════════ -->
+  <div class="screen" id="s-lead">
+    <div class="eyebrow">Your Results Are Ready</div>
+    <h2 class="lead-title">See Your Full<br>Home Detox<br>Score</h2>
+    <p class="lead-body">Enter your details to get your personalized score, category-by-category breakdown, and your top priority swaps — plus a free copy of the <em>Home Toxin Checklist</em>.</p>
+    <div class="lead-includes">
+      <div class="lead-include-item"><span class="include-dot"></span>Your score across all 5 categories</div>
+      <div class="lead-include-item"><span class="include-dot"></span>Specific findings based on your answers</div>
+      <div class="lead-include-item"><span class="include-dot"></span>Priority swaps ranked by exposure risk</div>
+      <div class="lead-include-item"><span class="include-dot"></span>Free Home Toxin Checklist PDF</div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="inp-name">First Name</label>
+      <input class="form-input" type="text" id="inp-name" placeholder="Your first name">
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="inp-email">Email Address</label>
+      <input class="form-input" type="email" id="inp-email" placeholder="you@email.com">
+    </div>
+    <button class="btn-primary" onclick="submitLead()" style="margin-top:6px;">
+      Reveal My Score
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <p class="form-privacy">🔒 No spam. You'll receive your results and weekly wellness insights. Unsubscribe anytime.</p>
+    <button class="skip-btn" onclick="showResults()">Skip — just show my score</button>
+  </div>
+
+  <!-- ════════════════ RESULTS ════════════════ -->
+  <div class="screen" id="s-results">
+
+    <div class="results-top">
+      <div class="score-ring-wrap">
+        <div class="score-ring" id="score-ring">
+          <svg viewBox="0 0 152 152"><circle class="ring-bg" cx="76" cy="76" r="66"/><circle class="ring-fill" id="ring-fill" cx="76" cy="76" r="66" stroke-dasharray="415" stroke-dashoffset="415"/></svg>
+          <div class="score-inner"><div class="score-num" id="score-num">0</div><div class="score-denom">out of 100</div></div>
+        </div>
+      </div>
+      <div class="results-grade" id="results-grade"></div>
+      <h2 class="results-title" id="results-title"></h2>
+      <p class="results-summary" id="results-summary"></p>
+    </div>
+
+    <div class="section-label">Risk by Category</div>
+    <div class="breakdown-grid" id="breakdown-grid"></div>
+
+    <div class="section-label">Key Findings</div>
+    <div class="findings" id="findings"></div>
+
+    <div class="cta-block">
+      <div class="cta-eyebrow">Next Step</div>
+      <div class="cta-title">Get Your Custom<br>Home Detox Report</div>
+      <p class="cta-body">A personalized audit of your home — water lab results, written report, and 1:1 review with Anthony. Specific to your home, not a generic guide.</p>
+      <div class="cta-chips">
+        <span class="cta-chip">SimpleLab Water Test</span>
+        <span class="cta-chip">Custom Written Report</span>
+        <span class="cta-chip">1:1 Call with Anthony</span>
+        <span class="cta-chip">Product Recommendations</span>
+        <span class="cta-chip">In-Home Option (Flathead Valley)</span>
+      </div>
+      <div class="cta-btns">
+        <a href="https://www.thewellnessbrew.com/services" target="_blank">
+          <button class="btn-primary">Book Home Detox Consult<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </a>
+        <button class="btn-ghost" onclick="restart()">Retake Assessment</button>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /quiz-wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════
+// SECTION INTROS
+// ═══════════════════════════════════════════════════
+const sections = [
+  {
+    id: 'water',
+    icon: '💧',
+    label: 'Section 1 of 5  ·  Water Quality',
+    title: 'Hydration & Water Quality',
+    body: 'Your water source is one of the most impactful and most overlooked exposure routes in the home — covering what you drink, cook with, bathe in, and give to children. This section takes about 60 seconds.',
+    stat: '165 million Americans at risk of PFAS in tap water — EWG',
+  },
+  {
+    id: 'kitchen',
+    icon: '🍳',
+    label: 'Section 2 of 5  ·  Kitchen & Cookware',
+    title: 'Kitchen, Cookware & Food Storage',
+    body: 'Your kitchen is a daily chemical-exposure zone. Cookware coatings, plastic containers, and heating methods are some of the highest-leverage swaps in any home. A single cracked non-stick pan can release up to 2.3 million microplastic particles.',
+    stat: 'Science of the Total Environment, 2022 — Mercogliano et al.',
+  },
+  {
+    id: 'personal',
+    icon: '🧴',
+    label: 'Section 3 of 5  ·  Personal Care',
+    title: 'Personal Care & Cosmetics',
+    body: 'The average person applies 10+ personal care products per day. Deodorant, shampoo, lotion, sunscreen, and fragrance are among the most direct routes of endocrine disruptor exposure in the home.',
+    stat: 'Phthalate exposure in children linked to personal care product use — EHP, 2024',
+  },
+  {
+    id: 'laundry',
+    icon: '👕',
+    label: 'Section 4 of 5  ·  Laundry & Cleaning',
+    title: 'Laundry & Cleaning Products',
+    body: 'Laundry residues live on the clothing you wear and the bedding you sleep in. Cleaning products are a measurable source of indoor VOCs. Women who clean regularly with conventional sprays show lung function decline equivalent to smoking a pack a day for 20 years.',
+    stat: 'Norwegian University of Science & Technology — 20-year study, 6,200 adults',
+  },
+  {
+    id: 'air',
+    icon: '🌬️',
+    label: 'Section 5 of 5  ·  Indoor Air',
+    title: 'Indoor Air, Mold & Off-Gassing',
+    body: 'Indoor air is typically 2–5× more polluted than outdoor air. HVAC filtration, ventilation, mold history, radon, and off-gassing sources all contribute. This is the section most people have thought least about.',
+    stat: 'EPA: Americans spend ~90% of their time indoors',
+  },
+];
+
+// ═══════════════════════════════════════════════════
+// QUESTIONS  (18 total across 5 sections)
+// score: 0 = highest risk, 3 = lowest risk
+// ═══════════════════════════════════════════════════
+const questions = [
+
+  // ── WATER (4 questions) ──────────────────────────
+  {
+    section: 0,
+    text: 'What is your primary source of drinking water?',
+    sub: 'This determines your baseline exposure to PFAS, heavy metals, and disinfection byproducts. A 2020 Duke/NC State study found RO systems reduce PFAS by 94%+ while pitcher filters show near-zero reduction.',
+    options: [
+      { text: 'Unfiltered tap water', note: 'Highest direct exposure to whatever is in your municipal or well supply', badge: 'high', score: 0 },
+      { text: 'Pitcher filter (Brita, PUR, ZeroWater)', note: 'Improves taste but does not meaningfully reduce PFAS', badge: 'high', score: 1 },
+      { text: 'Refrigerator filter or under-sink carbon filter', note: 'Removes some contaminants — effectiveness varies by certification', badge: 'med', score: 2 },
+      { text: 'Reverse osmosis system (under-sink or countertop)', note: 'Highest-performing filtration for PFAS, metals, and byproducts', badge: 'low', score: 3 },
+    ],
+    key: 'drinking_water',
+  },
+  {
+    section: 0,
+    text: 'Have you ever had your water professionally tested?',
+    sub: 'Lab testing is the only way to know what\'s actually in your water — not just what\'s typical for your zip code. Your filter selection should follow the data.',
+    options: [
+      { text: 'No — I\'ve never tested it', note: '', badge: 'high', score: 0 },
+      { text: 'Not sure / it\'s on my list', note: '', badge: 'high', score: 0 },
+      { text: 'Yes — more than 2 years ago', note: 'Water quality can shift; annual testing is the standard for well water', badge: 'med', score: 2 },
+      { text: 'Yes — within the last 12 months', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'water_tested',
+  },
+  {
+    section: 0,
+    text: 'What container do you primarily drink from throughout the day?',
+    sub: 'Reusable plastics leach chemicals into beverages — BPA-free does not mean chemical-free. Heat and repeated washing accelerate breakdown.',
+    options: [
+      { text: 'Single-use plastic bottles', note: 'Studies show bottled water contains ~90,000 more microplastics/year than filtered tap', badge: 'high', score: 0 },
+      { text: 'Reusable plastic bottle or tumbler', note: 'Still leaches trace plasticizers, especially if scratched or old', badge: 'med', score: 1 },
+      { text: 'Stainless steel or glass', note: 'Inert — no leaching of any kind', badge: 'low', score: 3 },
+      { text: 'Mix depending on the day', note: '', badge: 'med', score: 1 },
+    ],
+    key: 'container',
+  },
+  {
+    section: 0,
+    text: 'Do you have a shower filter or whole-house filter on your bathing water?',
+    sub: 'Chlorine and chloramines absorb through skin and inhaled steam during hot showers — a separate exposure route from drinking water.',
+    options: [
+      { text: 'No — unfiltered shower water', note: '', badge: 'high', score: 0 },
+      { text: 'Not sure', note: '', badge: 'high', score: 0 },
+      { text: 'Yes — shower filter only', note: 'Addresses the bathing route specifically', badge: 'low', score: 2 },
+      { text: 'Yes — whole-house filtration', note: 'Covers all water entry points in the home', badge: 'low', score: 3 },
+    ],
+    key: 'shower_filter',
+  },
+
+  // ── KITCHEN (4 questions) ─────────────────────────
+  {
+    section: 1,
+    text: 'What cookware do you primarily cook with?',
+    sub: 'A 2022 study found a single surface crack in Teflon releases ~9,100 microplastic particles. Broken or worn coating may release up to 2.3 million particles per pan.',
+    options: [
+      { text: 'Traditional non-stick / Teflon — scratched or worn', note: 'Immediate replacement priority', badge: 'high', score: 0 },
+      { text: 'Traditional non-stick / Teflon — good condition', note: 'Still a PFAS concern; any scratching triggers replacement', badge: 'med', score: 1 },
+      { text: 'Ceramic-coated non-stick (Caraway, GreenPan)', note: 'PFAS-free but coatings still have a 1–3 year lifespan', badge: 'med', score: 2 },
+      { text: 'Stainless steel, cast iron, or carbon steel', note: 'Coating-free and inert — the safest options', badge: 'low', score: 3 },
+    ],
+    key: 'cookware',
+  },
+  {
+    section: 1,
+    text: 'What do you primarily use to store food?',
+    sub: 'Hot food in plastic accelerates microplastic and chemical transfer significantly. Never microwave food in plastic — any plastic, including BPA-free.',
+    options: [
+      { text: 'Primarily plastic containers', note: '', badge: 'high', score: 0 },
+      { text: 'Mix of plastic and glass', note: '', badge: 'med', score: 1 },
+      { text: 'Primarily glass (Pyrex, Weck)', note: 'Inert and durable', badge: 'low', score: 3 },
+      { text: 'Primarily stainless steel', note: 'Inert — ideal for on-the-go storage', badge: 'low', score: 3 },
+    ],
+    key: 'food_storage',
+  },
+  {
+    section: 1,
+    text: 'Do you heat food in plastic containers in the microwave?',
+    sub: 'Heat dramatically accelerates plastic breakdown — microwaving can increase microplastic release by up to 50-fold from the same container used cold.',
+    options: [
+      { text: 'Yes, regularly', note: '', badge: 'high', score: 0 },
+      { text: 'Sometimes', note: '', badge: 'med', score: 1 },
+      { text: 'No — I use glass or ceramic in the microwave', note: '', badge: 'low', score: 3 },
+      { text: 'I don\'t use a microwave', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'microwave_plastic',
+  },
+  {
+    section: 1,
+    text: 'What coffee or tea setup do you use at home?',
+    sub: 'A 2025 lab study found drip coffee makers produce ~453 microplastic particles per liter as hot water passes through plastic internal components. Tea bags release hundreds to thousands of microplastics per mL.',
+    options: [
+      { text: 'Pod machine (Keurig, Nespresso) or conventional drip maker', note: 'Highest plastic-to-hot-water contact in the brewing process', badge: 'high', score: 0 },
+      { text: 'Conventional tea bags', note: 'Many bags contain microplastic mesh; switch to paper or metal filter', badge: 'med', score: 1 },
+      { text: 'Glass French press or pour-over with paper filter', note: 'Significantly less plastic in the water pathway', badge: 'low', score: 2 },
+      { text: 'Loose-leaf tea or I don\'t drink coffee/tea', note: 'Eliminates tea bag microplastic exposure entirely', badge: 'low', score: 3 },
+    ],
+    key: 'coffee',
+  },
+
+  // ── PERSONAL CARE (4 questions) ──────────────────
+  {
+    section: 2,
+    text: 'How would you describe your personal care products overall?',
+    sub: 'The average person applies 10+ personal care products daily. Phthalates from lotions and conditioners have been directly detected in children\'s urine in proportion to product use.',
+    options: [
+      { text: 'Conventional — I use whatever works, haven\'t checked ingredients', note: '', badge: 'high', score: 0 },
+      { text: 'I pay some attention but haven\'t done a full audit', note: '', badge: 'med', score: 1 },
+      { text: 'I actively choose EWG Verified or clean-labeled products', note: '', badge: 'low', score: 2 },
+      { text: 'Ingredient-conscious across all personal care — fragrance-free where possible', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'personal_care_overall',
+  },
+  {
+    section: 2,
+    text: 'What type of deodorant or antiperspirant do you use?',
+    sub: 'Aluminum salts in antiperspirants may act as metalloestrogens — interacting with estrogen receptors. Aluminum-free options are widely available and effective for most people.',
+    options: [
+      { text: 'Conventional antiperspirant (aluminum-based)', note: '', badge: 'high', score: 0 },
+      { text: 'Not sure what\'s in mine', note: '', badge: 'high', score: 0 },
+      { text: 'Natural or aluminum-free deodorant (Native, Primally Pure, Schmidt\'s)', note: '', badge: 'low', score: 3 },
+      { text: 'I don\'t use deodorant or antiperspirant', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'deodorant',
+  },
+  {
+    section: 2,
+    text: 'Do you use products with "fragrance" or "parfum" listed as an ingredient?',
+    sub: '"Fragrance" is legally protected as a trade secret and can represent hundreds of undisclosed chemicals — including phthalates, aromatic aldehydes, and known sensitizers — in a single ingredient listing.',
+    options: [
+      { text: 'Yes — in most of my personal care and cleaning products', note: '', badge: 'high', score: 0 },
+      { text: 'In some products — I haven\'t fully audited', note: '', badge: 'med', score: 1 },
+      { text: 'I actively choose fragrance-free products', note: '"Fragrance-free" is different from "unscented" — unscented can contain masking agents', badge: 'low', score: 2 },
+      { text: 'Fragrance-free across essentially everything', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'fragrance',
+  },
+  {
+    section: 2,
+    text: 'What type of sunscreen do you primarily use?',
+    sub: 'An FDA study found all six common chemical UV filters are absorbed into the bloodstream above the FDA\'s safety threshold after a single application. A 2024 review of 75 studies found hormonal disruptions associated with chemical filters.',
+    options: [
+      { text: 'Chemical sunscreen (oxybenzone, octinoxate, avobenzone)', note: 'Systemic absorption confirmed; hormonal effects under review', badge: 'high', score: 0 },
+      { text: 'Not sure what type I use', note: '', badge: 'med', score: 1 },
+      { text: 'Mineral sunscreen (zinc oxide or titanium dioxide)', note: 'Sits on skin surface — does not absorb systemically', badge: 'low', score: 3 },
+      { text: 'I don\'t use sunscreen regularly', note: 'Sun protection still strongly recommended — choose mineral', badge: 'med', score: 1 },
+    ],
+    key: 'sunscreen',
+  },
+
+  // ── LAUNDRY & CLEANING (3 questions) ─────────────
+  {
+    section: 3,
+    text: 'What type of laundry detergent do you use?',
+    sub: 'Conventional detergents leave residue on fabric that off-gasses against skin. Many contain 1,4-dioxane (EPA "likely carcinogen"), synthetic fragrance, and methylisothiazolinone — a leading cause of contact dermatitis.',
+    options: [
+      { text: 'Conventional scented (Tide, Gain, Persil)', note: '', badge: 'high', score: 0 },
+      { text: 'Conventional fragrance-free / Free & Clear', note: 'Removes fragrance concern but other chemical concerns remain', badge: 'med', score: 1 },
+      { text: 'Non-toxic brand (Molly\'s Suds, Branch Basics, Seventh Generation)', note: '', badge: 'low', score: 2 },
+      { text: 'EWG Verified or EPA Safer Choice certified product', note: 'Highest standard of third-party screening', badge: 'low', score: 3 },
+    ],
+    key: 'detergent',
+  },
+  {
+    section: 3,
+    text: 'Do you use fabric softener or dryer sheets?',
+    sub: 'Dryer sheets are one of the highest-fragrance items in most households, coating every fabric item with synthetic compounds. Quats in fabric softeners persist on fabric for days and are linked to new-onset asthma.',
+    options: [
+      { text: 'Yes — scented dryer sheets and/or liquid fabric softener', note: '', badge: 'high', score: 0 },
+      { text: 'Fragrance-free fabric softener only', note: 'Removes fragrance but quat concern remains', badge: 'med', score: 1 },
+      { text: 'Wool dryer balls — nothing else', note: 'Reduces static, softens fabric, cuts drying time 10–15%', badge: 'low', score: 3 },
+      { text: 'Nothing — no softener or dryer sheets', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'dryer_sheets',
+  },
+  {
+    section: 3,
+    text: 'What all-purpose and bathroom cleaners do you use?',
+    sub: 'A 20-year study of 6,200 adults found regular cleaning spray use caused lung function decline equivalent to smoking a pack a day. Aerosolized VOCs from sprays are the primary mechanism.',
+    options: [
+      { text: 'Conventional sprays (Lysol, 409, Mr. Clean, Clorox)', note: '', badge: 'high', score: 0 },
+      { text: '"Green" label but mainstream (Method, Mrs. Meyer\'s)', note: 'Better on some metrics; fragrance and quats often still present', badge: 'med', score: 1 },
+      { text: 'Non-toxic concentrate (Branch Basics, Force of Nature, Blueland)', note: '', badge: 'low', score: 2 },
+      { text: 'Vinegar, baking soda, or hydrogen peroxide — DIY', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'cleaners',
+  },
+
+  // ── INDOOR AIR (3 questions) ──────────────────────
+  {
+    section: 4,
+    text: 'What type of HVAC filter do you use, and how often do you change it?',
+    sub: 'MERV 13 is the minimum residential standard for meaningful particulate filtration, including PM2.5. A neglected MERV 13 filter performs worse than a fresh MERV 8.',
+    options: [
+      { text: 'Standard fiberglass filter — not sure when it was last changed', note: 'MERV 1–4: traps only large dust and lint', badge: 'high', score: 0 },
+      { text: 'Pleated filter, changed every 3–6 months', note: 'MERV 8: captures pollen and dust mites — better but not PM2.5', badge: 'med', score: 1 },
+      { text: 'MERV 13 or higher, changed every 60–90 days', note: 'Recommended residential minimum for PM2.5 and fine particulates', badge: 'low', score: 3 },
+      { text: 'I don\'t have central HVAC / I\'m not sure', note: '', badge: 'high', score: 0 },
+    ],
+    key: 'hvac',
+  },
+  {
+    section: 4,
+    text: 'Do you use a portable HEPA air purifier in your home?',
+    sub: 'A HEPA purifier in the bedroom — where you spend 7–9 hours — captures fine particulates, VOCs, and allergens continuously. HEPA is the standard residential HVAC systems cannot achieve.',
+    options: [
+      { text: 'No air purifier', note: '', badge: 'high', score: 0 },
+      { text: 'Ionizer, ozone generator, or plug-in air freshener', note: 'These are not air purifiers and some generate harmful byproducts', badge: 'high', score: 0 },
+      { text: 'Yes — HEPA purifier in one room (bedroom or living area)', note: 'Coway, Levoit, IQAir are the recommended tiers', badge: 'low', score: 2 },
+      { text: 'Yes — HEPA purifiers in multiple rooms', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'air_purifier',
+  },
+  {
+    section: 4,
+    text: 'Have you had mold, water damage, or radon tested in your home?',
+    sub: 'Radon is the second-leading cause of lung cancer in the US — colorless, odorless, and responsible for ~21,000 deaths per year. The EPA action level is 4 pCi/L. Mold testing (ERMI/HERTSMI-2) is far more reliable than DIY petri kits.',
+    options: [
+      { text: 'Neither radon nor mold has been tested', note: '', badge: 'high', score: 0 },
+      { text: 'One has been tested but not the other', note: '', badge: 'med', score: 1 },
+      { text: 'Radon tested — result was below 4 pCi/L', note: '', badge: 'low', score: 2 },
+      { text: 'Both radon and mold tested within the last 2 years', note: '', badge: 'low', score: 3 },
+    ],
+    key: 'radon_mold',
+  },
+];
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+const TOTAL_Q = questions.length; // 18
+let currentQ      = -1; // -1 = not started
+let currentSec    = -1;
+let answers       = new Array(TOTAL_Q).fill(null);
+let pendingSection = -1;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Start ──
+function startQuiz() {
+  currentQ = 0;
+  currentSec = -1;
+  showSectionCard(0);
+}
+
+// ── Section card ──
+function showSectionCard(secIdx) {
+  const s = sections[secIdx];
+  document.getElementById('sc-icon').textContent  = s.icon;
+  document.getElementById('sc-title').textContent = s.title;
+  document.getElementById('sc-body').textContent  = s.body;
+  document.getElementById('sc-stat').textContent  = s.stat;
+  pendingSection = secIdx;
+  showScreen('s-section');
+}
+
+function startSection() {
+  currentSec = pendingSection;
+  renderQuestion();
+}
+
+// ── Render question ──
+function renderQuestion() {
+  showScreen('s-question');
+  const q = questions[currentQ];
+
+  // Section header
+  const sec = sections[q.section];
+  document.getElementById('q-section-marker').textContent = sec.label;
+
+  // Progress
+  const pct = ((currentQ + 1) / TOTAL_Q) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-frac').textContent = `Q ${currentQ + 1} / ${TOTAL_Q}`;
+  document.getElementById('prog-label').textContent = sec.label.split('·')[0].trim();
+
+  // Question
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-sub').innerHTML = q.sub;
+
+  // Options
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const isSelected = answers[currentQ] === i;
+    const div = document.createElement('div');
+    div.className = 'option' + (isSelected ? ' selected' : '');
+    div.innerHTML = `
+      <div class="opt-radio"></div>
+      <div class="opt-content">
+        <div class="opt-text">${opt.text}</div>
+        ${opt.note ? `<div class="opt-note">${opt.note}</div>` : ''}
+      </div>
+      <span class="opt-badge badge-${opt.badge}">${opt.badge === 'high' ? 'Higher Risk' : opt.badge === 'med' ? 'Moderate' : 'Lower Risk'}</span>`;
+    div.addEventListener('click', () => selectOption(i));
+    container.appendChild(div);
+  });
+
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').disabled = answers[currentQ] === null;
+}
+
+function selectOption(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.option').forEach((el, idx) => el.classList.toggle('selected', idx === i));
+  document.getElementById('btn-next').disabled = false;
+}
+
+function goNext() {
+  if (answers[currentQ] === null) return;
+
+  const nextQ = currentQ + 1;
+
+  if (nextQ >= TOTAL_Q) {
+    // All done — lead capture
+    showScreen('s-lead');
+    return;
+  }
+
+  // Check if entering a new section
+  if (questions[nextQ].section !== questions[currentQ].section) {
+    currentQ = nextQ;
+    showSectionCard(questions[nextQ].section);
+  } else {
+    currentQ = nextQ;
+    renderQuestion();
+  }
+}
+
+function goBack() {
+  if (currentQ === 0) return;
+  currentQ--;
+  // If we crossed a section boundary, just go back to the question (skip re-showing section card)
+  renderQuestion();
+}
+
+// ── Lead capture ──
+function submitLead() {
+  const email = document.getElementById('inp-email').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('inp-email').classList.add('error');
+    return;
+  }
+  document.getElementById('inp-email').classList.remove('error');
+  showResults();
+}
+
+// ═══════════════════════════════════════════════════
+// RESULTS LOGIC
+// ═══════════════════════════════════════════════════
+function showResults() {
+  showScreen('s-results');
+  buildResults();
+}
+
+function buildResults() {
+  // ── Scores ──
+  let total = 0;
+  const maxPerQ = 3;
+  answers.forEach((a, qi) => {
+    if (a !== null) total += questions[qi].options[a].score;
+  });
+  const maxTotal = TOTAL_Q * maxPerQ;
+  const pct = Math.round((total / maxTotal) * 100);
+
+  // ── Category scores ──
+  const cats = {
+    'Water Quality':         { qIndices: [0,1,2,3],     score: 0, max: 12 },
+    'Kitchen & Cookware':    { qIndices: [4,5,6,7],     score: 0, max: 12 },
+    'Personal Care':         { qIndices: [8,9,10,11],   score: 0, max: 12 },
+    'Laundry & Cleaning':    { qIndices: [12,13,14],    score: 0, max: 9  },
+    'Indoor Air':            { qIndices: [15,16,17],    score: 0, max: 9  },
+  };
+  Object.values(cats).forEach(c => {
+    c.indices = c.qIndices;
+    c.qIndices.forEach(qi => { if (answers[qi] !== null) c.score += questions[qi].options[answers[qi]].score; });
+  });
+
+  // ── Tier ──
+  let tier, grade, title, summary;
+  if (pct >= 80) {
+    tier = 'excellent'; grade = '✦ Well Optimized';
+    title = 'Your home is performing <em>above average</em>.';
+    summary = "You're making intentional choices — but even high-scoring homes have hidden gaps. A professional audit often surfaces 2–3 priority areas that data confirms rather than estimates.";
+  } else if (pct >= 60) {
+    tier = 'good'; grade = '◈ Moderate Exposure';
+    title = 'You have <em>meaningful gaps</em> worth closing.';
+    summary = "You're aware, but several areas are adding to your daily exposure load in ways you may not fully see yet. Targeted changes in your lower-scoring categories have an outsized impact.";
+  } else if (pct >= 35) {
+    tier = 'moderate'; grade = '⚠ Elevated Risk';
+    title = 'Your home is <em>actively adding</em> to your toxic load.';
+    summary = "Multiple categories — likely water, kitchen, and cleaning products — are contributing daily chemical exposure that compounds quietly. The good news: most of this is addressable with product swaps.";
+  } else {
+    tier = 'poor'; grade = '⚠ High Priority';
+    title = 'Your home environment needs <em>immediate attention</em>.';
+    summary = "Based on your answers, you're living with significant, modifiable environmental toxin exposure across several categories. These are fixable, often without major renovation or expense.";
+  }
+
+  // Apply tier
+  const ring = document.getElementById('score-ring');
+  ring.className = `score-ring tier-${tier}`;
+  document.getElementById('results-grade').textContent = grade;
+  document.getElementById('results-title').innerHTML = title;
+  document.getElementById('results-summary').textContent = summary;
+  document.getElementById('results-grade').className = `results-grade tier-${tier}`;
+
+  // Animate score counter
+  const scoreEl = document.getElementById('score-num');
+  let count = 0;
+  const interval = setInterval(() => {
+    count = Math.min(count + 2, pct);
+    scoreEl.textContent = count;
+    if (count >= pct) clearInterval(interval);
+  }, 28);
+
+  // Animate ring (circumference = 2π × 66 ≈ 415)
+  setTimeout(() => {
+    const offset = 415 - (pct / 100) * 415;
+    document.getElementById('ring-fill').style.strokeDashoffset = offset;
+  }, 80);
+
+  // ── Category breakdown ──
+  const grid = document.getElementById('breakdown-grid');
+  grid.innerHTML = '';
+  Object.entries(cats).forEach(([name, c]) => {
+    const catPct = Math.round((c.score / c.max) * 100);
+    const color = catPct >= 70 ? 'var(--sage)' : catPct >= 40 ? 'var(--gold)' : 'var(--rust)';
+    const status = catPct >= 70 ? '✓ Low Risk' : catPct >= 40 ? '⚡ Moderate Risk' : '⚠ High Priority';
+    grid.innerHTML += `
+      <div class="breakdown-item">
+        <div class="bd-cat">${name}</div>
+        <div class="bd-track"><div class="bd-fill" style="width:0%;background:${color}" data-target="${catPct}"></div></div>
+        <div class="bd-status" style="color:${color}">${status}</div>
+      </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.bd-fill').forEach(el => { el.style.width = el.dataset.target + '%'; });
+  }, 180);
+
+  // ── Dynamic findings ──
+  const findings = [];
+  const a = answers; // shorthand
+
+  // Water findings
+  if (a[0] !== null && a[0] <= 1)
+    findings.push({ type: 'warn', icon: '💧', title: 'Drinking water is likely unfiltered or under-filtered',
+      body: 'Pitcher filters show near-zero PFAS reduction in independent testing. An RO system or certified multi-stage under-sink filter is the meaningful upgrade.', source: 'Hu et al., 2020 — Duke/NC State' });
+  if (a[1] !== null && a[1] <= 1)
+    findings.push({ type: 'warn', icon: '🔬', title: 'No recent lab testing on your water',
+      body: 'Your filter selection should follow your actual water profile — not zip-code averages. A SimpleLab Tap Score panel covers PFAS, metals, and disinfection byproducts.', source: 'SimpleLab / Tap Score' });
+  if (a[2] !== null && a[2] === 0)
+    findings.push({ type: 'warn', icon: '🧴', title: 'Single-use plastic bottles add ~90,000 extra microplastics per year',
+      body: 'Contamination originates in manufacturing, storage, and transport — not just the water source. Switch to glass or stainless; add a filtering travel bottle for away-from-home use.', source: 'Cox et al., 2019 — Environ. Science & Tech.' });
+  if (a[3] !== null && a[3] <= 1)
+    findings.push({ type: 'caution', icon: '🚿', title: 'Shower water is unfiltered',
+      body: 'Chlorine and chloramines absorb through skin and lungs during hot showers. A KDF shower filter is a $30–60 upgrade that addresses this directly.', source: '' });
+
+  // Kitchen findings
+  if (a[4] !== null && a[4] === 0)
+    findings.push({ type: 'warn', icon: '🍳', title: 'Scratched non-stick cookware: immediate replacement priority',
+      body: 'A single surface crack releases ~9,100 microplastic particles per use. Worn coating may release up to 2.3 million. Stainless, cast iron, or carbon steel eliminates the risk.', source: 'Mercogliano et al., 2022 — Sci. Total Environ.' });
+  if (a[5] !== null && a[5] === 0)
+    findings.push({ type: 'warn', icon: '📦', title: 'Plastic food storage — especially with heat',
+      body: 'Hot food in plastic containers accelerates microplastic and phthalate transfer. Glass (Pyrex, Weck) or stainless is inert and lasts indefinitely.', source: '' });
+  if (a[6] !== null && a[6] <= 1)
+    findings.push({ type: 'caution', icon: '☢️', title: 'Microwaving in plastic: up to 50× more microplastic release',
+      body: 'Heat dramatically accelerates plastic breakdown. Transfer food to glass or ceramic before any microwave heating — including containers labelled "microwave safe."', source: '' });
+  if (a[7] !== null && a[7] === 0)
+    findings.push({ type: 'caution', icon: '☕', title: 'Coffee maker plastic pathway is an exposure source',
+      body: 'Drip machines produce ~453 microplastic particles per liter as hot water moves through plastic components. A glass-carafe pour-over or French press is a straightforward fix.', source: 'Water Filter Guru, 2025 (certified lab analysis)' });
+
+  // Personal care findings
+  if (a[8] !== null && a[8] === 0)
+    findings.push({ type: 'warn', icon: '🧴', title: 'Personal care products haven\'t been audited for ingredients',
+      body: 'The EWG Skin Deep database (ewg.org/skindeep) rates 90,000+ products. Start with your top 5 daily-use items: deodorant, shampoo, lotion, sunscreen, and toothpaste.', source: 'EWG Skin Deep' });
+  if (a[9] !== null && a[9] === 0)
+    findings.push({ type: 'caution', icon: '💨', title: 'Aluminum-based antiperspirant — a precautionary swap',
+      body: 'Aluminum salts may act as metalloestrogens. The epidemiological evidence is mixed, but aluminum-free alternatives (Native, Primally Pure) are effective for most people and easily available.', source: 'Darbre, 2024 — meta-analysis' });
+  if (a[10] !== null && a[10] <= 1)
+    findings.push({ type: 'warn', icon: '🌸', title: '"Fragrance" on a label can represent hundreds of undisclosed chemicals',
+      body: 'The International Fragrance Association\'s working list includes 3,000+ chemicals used in fragrance. Seek "fragrance-free" — not "unscented," which may contain masking agents.', source: 'IFRA Transparency List' });
+  if (a[11] !== null && a[11] === 0)
+    findings.push({ type: 'caution', icon: '☀️', title: 'Chemical sunscreen: systemic absorption confirmed by FDA',
+      body: 'All six common chemical UV filters absorb into the bloodstream above the FDA safety threshold after a single application. Mineral sunscreen (zinc oxide) doesn\'t absorb systemically.', source: 'Matta et al., 2020 — JAMA / FDA study' });
+
+  // Laundry findings
+  if (a[12] !== null && a[12] === 0)
+    findings.push({ type: 'warn', icon: '🧺', title: 'Conventional scented detergent: fragrance, 1,4-dioxane, and MI exposure',
+      body: 'Conventional detergents leave residue on fabric that off-gasses against skin all day. 1,4-dioxane is an EPA "likely carcinogen." Fragrance-free or EWG Verified alternatives exist at the same price point.', source: 'EPA 2024 / Rolsky & Kelkar, 2021 — ASU' });
+  if (a[13] !== null && a[13] === 0)
+    findings.push({ type: 'warn', icon: '🌀', title: 'Dryer sheets: highest fragrance-per-use item in most homes',
+      body: 'Quats in dryer sheets persist on fabric for days and are linked to new-onset asthma. Wool dryer balls reduce static, soften fabric, and cut drying time — with no chemical residue.', source: 'Dumas et al. — Environ. Research' });
+  if (a[14] !== null && a[14] === 0)
+    findings.push({ type: 'warn', icon: '🫁', title: 'Conventional cleaning sprays and 20-year lung function decline',
+      body: 'Regular cleaning spray use is associated with lung function decline equivalent to a pack-a-day smoking habit over 20 years. Switch to liquid formulations and always ventilate.', source: 'Svanes et al., 2018 — Am. J. Resp. & Critical Care Med.' });
+
+  // Air findings
+  if (a[15] !== null && a[15] <= 1)
+    findings.push({ type: 'warn', icon: '🌬️', title: 'HVAC filter below MERV 13 — PM2.5 is passing through',
+      body: 'MERV 13 is the residential minimum for meaningful PM2.5 filtration. Below that, fine particulates that reach the bloodstream are not captured. Upgrade costs $15–25 per filter.', source: 'ASHRAE / EPA' });
+  if (a[16] !== null && a[16] <= 1)
+    findings.push({ type: 'caution', icon: '💨', title: 'No HEPA air purifier in the home',
+      body: 'Your HVAC system cannot achieve HEPA-level filtration. A correctly-sized HEPA purifier in the bedroom (7–9 hours of sleep exposure) is one of the highest-ROI air quality investments.', source: 'Coway Airmega, Levoit, IQAir — CADR-rated options' });
+  if (a[17] !== null && a[17] === 0)
+    findings.push({ type: 'warn', icon: '☢️', title: 'Radon and mold untested — two silent priority risks',
+      body: 'Radon is the second-leading cause of lung cancer (~21,000 US deaths/year). A charcoal canister test costs $20–30. ERMI/HERTSMI-2 mold PCR testing (ImmunoLytics) is far more reliable than home kits.', source: 'EPA Radon / Institute of Medicine, 2004' });
+
+  // Add a positive finding if few problems
+  if (findings.length < 2) {
+    findings.push({ type: 'ok', icon: '✅', title: 'Your home is performing well across most categories',
+      body: 'You\'re already making intentional choices. A professional audit helps confirm where things stand with lab data and catches the 1–2 gaps that are hard to self-identify.', source: '' });
+  }
+
+  const findingsEl = document.getElementById('findings');
+  findingsEl.innerHTML = '';
+  findings.slice(0, 6).forEach(f => {
+    findingsEl.innerHTML += `
+      <div class="finding">
+        <div class="finding-icon fi-${f.type}">${f.icon}</div>
+        <div class="finding-body">
+          <strong>${f.title}</strong>
+          <p>${f.body}</p>
+          ${f.source ? `<div class="source">📎 ${f.source}</div>` : ''}
+        </div>
+      </div>`;
+  });
+}
+
+function restart() {
+  answers = new Array(TOTAL_Q).fill(null);
+  currentQ = -1;
+  currentSec = -1;
+  showScreen('s-intro');
+}
+</script>
+</body>
+</html>
