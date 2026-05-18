@@ -973,7 +973,8 @@ function submitLead() {
   // Send to Zapier webhook
   fetch('https://hooks.zapier.com/hooks/catch/27588813/4o6hxq0/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({
       name:  name || '',
       email: email,
