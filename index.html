@@ -626,7 +626,7 @@ const questions = [
     sub: 'This determines your baseline exposure to PFAS, heavy metals, and disinfection byproducts. A 2020 Duke/NC State study found RO systems reduce PFAS by 94%+ while pitcher filters show near-zero reduction.',
     options: [
       { text: 'Unfiltered tap water', note: 'Highest direct exposure to whatever is in your municipal or well supply', badge: 'high', score: 0 },
-      { text: 'Pitcher filter (Brita, PUR, ZeroWater)', note: 'Improves taste but does not meaningfully reduce PFAS', badge: 'high', score: 1 },
+      { text: 'Conventional pitcher filter (Brita, PUR, ZeroWater)', note: '', badge: 'high', score: 1 },
       { text: 'Refrigerator filter or under-sink carbon filter', note: 'Removes some contaminants — effectiveness varies by certification', badge: 'med', score: 2 },
       { text: 'Reverse osmosis system (under-sink or countertop)', note: 'Highest-performing filtration for PFAS, metals, and byproducts', badge: 'low', score: 3 },
     ],
@@ -761,10 +761,10 @@ const questions = [
     text: 'What type of sunscreen do you primarily use?',
     sub: 'An FDA study found all six common chemical UV filters are absorbed into the bloodstream above the FDA\'s safety threshold after a single application. A 2024 review of 75 studies found hormonal disruptions associated with chemical filters.',
     options: [
-      { text: 'Chemical sunscreen (oxybenzone, octinoxate, avobenzone)', note: 'Systemic absorption confirmed; hormonal effects under review', badge: 'high', score: 0 },
+      { text: 'Chemical sunscreen (oxybenzone, octinoxate, avobenzone)', note: '', badge: 'high', score: 0 },
       { text: 'Not sure what type I use', note: '', badge: 'med', score: 1 },
-      { text: 'Mineral sunscreen (zinc oxide or titanium dioxide)', note: 'Sits on skin surface — does not absorb systemically', badge: 'low', score: 3 },
-      { text: 'I don\'t use sunscreen regularly', note: 'Sun protection still strongly recommended — choose mineral', badge: 'med', score: 1 },
+      { text: 'Mineral sunscreen (zinc oxide or titanium dioxide)', note: '', badge: 'low', score: 3 },
+      { text: 'I don\'t use sunscreen', note: '', badge: 'med', score: 1 },
     ],
     key: 'sunscreen',
   },
@@ -915,9 +915,7 @@ function renderQuestion() {
       <div class="opt-radio"></div>
       <div class="opt-content">
         <div class="opt-text">${opt.text}</div>
-        ${opt.note ? `<div class="opt-note">${opt.note}</div>` : ''}
-      </div>
-      <span class="opt-badge badge-${opt.badge}">${opt.badge === 'high' ? 'Higher Risk' : opt.badge === 'med' ? 'Moderate' : 'Lower Risk'}</span>`;
+      </div>`;
     div.addEventListener('click', () => selectOption(i));
     container.appendChild(div);
   });
